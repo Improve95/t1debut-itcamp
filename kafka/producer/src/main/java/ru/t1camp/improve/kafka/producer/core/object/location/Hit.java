@@ -1,4 +1,4 @@
-package ru.t1camp.improve.kafka.producer.service.weather.object;
+package ru.t1camp.improve.kafka.producer.core.object.location;
 
 import lombok.Data;
 

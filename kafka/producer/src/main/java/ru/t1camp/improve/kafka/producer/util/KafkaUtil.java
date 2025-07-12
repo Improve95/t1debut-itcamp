@@ -1,9 +1,6 @@
 package ru.t1camp.improve.kafka.producer.util;
 
-import lombok.experimental.UtilityClass;
+public final class KafkaUtil {
 
-@UtilityClass
-public class KafkaUtil {
-
-    public final String WEATHER_TOPIC = "weather-topic";
+    public static final String WEATHER_TOPIC = "weather-topic";
 }
