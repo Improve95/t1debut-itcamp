@@ -1,0 +1,13 @@
+server:
+  port: ${PRODUCER_PORT}
+
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
+    listener:
+      ack-mode: record
+    admin:
+      auto-create: false
+
+KAFKA_HOST: ${KAFKA_OUTSIDE_HOST}
+KAFKA_PORT: ${KAFKA_OUTSIDE_PORT}
