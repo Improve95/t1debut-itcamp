@@ -1,0 +1,9 @@
+server:
+  port: 8080
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+KAFKA_HOST: ${KAFKA_INSIDE_HOST}
+KAFKA_PORT: ${KAFKA_INSIDE_PORT}
