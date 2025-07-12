@@ -1,14 +1,10 @@
 package ru.t1camp.improve.kafka.producer.core.object.weather;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder
 public class Wind {
 
     private double speed;

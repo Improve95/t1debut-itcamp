@@ -9,11 +9,11 @@ public class WeatherMessageKafka {
 
     private long time;
 
-    private int temp;
+    private double temp;
 
     private String description;
 
-    private int windSpeed;
+    private double windSpeed;
 
     private int cloudsAll;
 }
