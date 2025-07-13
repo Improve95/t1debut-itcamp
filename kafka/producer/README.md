@@ -1,5 +1,5 @@
 запуск: 
-1) docker-compose up -d
+1) docker-compose up
 2) в консоль прописать
 
 2.1) docker exec -it kafka-service bash /usr/bin/kafka-topics --bootstrap-server kafka:29092 --create --topic weather-event --partitions 1 --replication-factor 1

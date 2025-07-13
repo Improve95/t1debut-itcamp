@@ -1,6 +1,7 @@
 package ru.t1camp.improve.kafka.consumer.configuration;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -13,8 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Configuration
 @RequiredArgsConstructor
+@Slf4j
+@Configuration
 public class WeatherConsumerConfig {
 
     private final KafkaConfig kafkaConfig;

@@ -9,6 +9,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - ${ZOOKEEPER_OUTSIDE_PORT}:2181
+    networks:
+      - weather
 
   kafka:
     image: confluentinc/cp-kafka:7.9.0
@@ -27,6 +29,8 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+    networks:
+      - weather
 
   weather-event-service:
     build:
@@ -37,3 +41,12 @@ services:
     container_name: "weather-event-service"
     depends_on:
       - kafka
+    networks:
+      - weather
+
+networks:
+  weather:
+    name: weather-event-network
+    driver: bridge
+
+

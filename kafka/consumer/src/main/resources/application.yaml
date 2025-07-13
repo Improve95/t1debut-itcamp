@@ -3,7 +3,6 @@ spring:
     name: weather-statistics-service
   config:
     import: optional:file:.env[.properties]
-
   kafka:
     bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
     weather-groupId: "weather-group"

@@ -6,5 +6,10 @@ services:
     container_name: weather-statistics-service
     env_file:
       - .env
-    ports:
-      - ${WEATHER_EVENT_PORT}:8080
+    networks:
+      - weather
+
+networks:
+  weather:
+    name: weather-event-network
+    external: true

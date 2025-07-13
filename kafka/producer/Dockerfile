@@ -11,4 +11,4 @@ FROM openjdk:17
 
 COPY --from=build /weather-event-service/build/libs/weather-event-service-0.0.1-SNAPSHOT.jar .
 
-ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "weather-event-service-0.0.1-SNAPSHOT.jar", "--server.port=8080"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "weather-event-service-0.0.1-SNAPSHOT.jar"]
