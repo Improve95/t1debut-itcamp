@@ -10,7 +10,7 @@ import ru.t1camp.improve.kafka.producer.core.service.WeatherService;
 @Configuration
 public class WeatherGeneratorConfiguration {
 
-    @Value("${weather.generator.delay}")
+    @Value("${weather.generator.period}")
     private long period;
 
     @Bean

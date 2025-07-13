@@ -29,8 +29,8 @@ public class WeatherGeneratorScheduler {
                     @Override
                     public void run() {
                         WeatherMessage weatherMessage = weatherGenerator.generateWeatherMessage();
-                        log.trace("new message {}", weatherMessage);
                         weatherService.sendWeatherIntoBroker(weatherMessage);
+                        log.info("new message {}", weatherMessage);
                     }
                 },
                 0,

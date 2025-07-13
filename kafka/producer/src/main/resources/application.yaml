@@ -18,4 +18,4 @@ KAFKA_PORT: ${KAFKA_OUTSIDE_PORT}
 
 weather:
   generator:
-    delay: 2000
+    period: 5000
