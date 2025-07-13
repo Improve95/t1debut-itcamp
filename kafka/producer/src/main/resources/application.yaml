@@ -1,6 +1,3 @@
-server:
-  port: ${PRODUCER_PORT}
-
 spring:
   application:
     name: weather-event-service
@@ -18,4 +15,4 @@ KAFKA_PORT: ${KAFKA_OUTSIDE_PORT}
 
 weather:
   generator:
-    period: 5000
+    period: 10000
