@@ -29,7 +29,6 @@ public class WeatherConsumerConfig {
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         properties.put(JsonDeserializer.VALUE_DEFAULT_TYPE, WeatherMessageKafka.class.getName());
-        properties.put(JsonDeserializer.TRUSTED_PACKAGES, "ru.t1camp.improve.kafka.producer.core.object.kafka");
         return new DefaultKafkaConsumerFactory<>(properties);
     }
 
