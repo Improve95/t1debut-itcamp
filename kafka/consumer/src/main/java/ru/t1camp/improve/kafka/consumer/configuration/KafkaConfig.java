@@ -5,7 +5,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Value
 @ConfigurationProperties(prefix = "spring.kafka")
-public class KafkaBootstrapServersConfig {
+public class KafkaConfig {
 
     private String bootstrapServers;
+
+    private String weatherGroupId;
+
+    private String weatherTopic;
 }
