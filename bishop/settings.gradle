@@ -1,1 +1,3 @@
 rootProject.name = 'bishop'
+
+include 'synthetic-human-core-starter'

@@ -1,4 +1,4 @@
-package ru.improve.itcamp.bishop.api.dto.command;
+package ru.improve.itcamp.synthetic.human.core.starter.api.dto.command;
 
 import lombok.Builder;
 import lombok.Data;

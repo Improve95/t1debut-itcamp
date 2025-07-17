@@ -1,4 +1,4 @@
-package ru.improve.itcamp.bishop.api.exception;
+package ru.improve.itcamp.synthetic.human.core.starter.api.exception;
 
 import lombok.AccessLevel;
 import lombok.Getter;

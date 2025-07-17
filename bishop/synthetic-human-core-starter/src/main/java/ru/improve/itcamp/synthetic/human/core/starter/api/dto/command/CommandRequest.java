@@ -1,10 +1,10 @@
-package ru.improve.itcamp.bishop.api.dto.command;
+package ru.improve.itcamp.synthetic.human.core.starter.api.dto.command;
 
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.improve.itcamp.bishop.core.command.CommandPriority;
+import ru.improve.itcamp.synthetic.human.core.starter.core.command.CommandPriority;
 
 import java.time.LocalDateTime;
 

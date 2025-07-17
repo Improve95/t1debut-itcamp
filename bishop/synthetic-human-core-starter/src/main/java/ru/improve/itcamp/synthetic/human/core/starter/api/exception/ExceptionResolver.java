@@ -1,4 +1,4 @@
-package ru.improve.itcamp.bishop.api.exception;
+package ru.improve.itcamp.synthetic.human.core.starter.api.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static ru.improve.itcamp.bishop.api.exception.ErrorCode.ACCESS_DENIED;
-import static ru.improve.itcamp.bishop.api.exception.ErrorCode.ALREADY_EXIST;
-import static ru.improve.itcamp.bishop.api.exception.ErrorCode.EXPIRED;
-import static ru.improve.itcamp.bishop.api.exception.ErrorCode.ILLEGAL_DTO_VALUE;
-import static ru.improve.itcamp.bishop.api.exception.ErrorCode.ILLEGAL_VALUE;
-import static ru.improve.itcamp.bishop.api.exception.ErrorCode.INTERNAL_SERVER_ERROR;
-import static ru.improve.itcamp.bishop.api.exception.ErrorCode.NOT_FOUND;
-import static ru.improve.itcamp.bishop.api.exception.ErrorCode.UNAUTHORIZED;
+import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.ACCESS_DENIED;
+import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.ALREADY_EXIST;
+import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.EXPIRED;
+import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.ILLEGAL_DTO_VALUE;
+import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.ILLEGAL_VALUE;
+import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.INTERNAL_SERVER_ERROR;
+import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.NOT_FOUND;
+import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.UNAUTHORIZED;
 
 @RestControllerAdvice
 public class ExceptionResolver {
