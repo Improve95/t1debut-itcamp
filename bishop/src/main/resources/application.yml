@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: bishop
+
+synthetic-human:
+  task-executor-thread-pool-size: 4
+  task-queue-size: 8

@@ -1,13 +1,13 @@
 package ru.improve.itcamp.synthetic.human.core.starter.configuration.starter;
 
-import lombok.Value;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@Value
+@Data
 @ConfigurationProperties(prefix = "synthetic-human")
 public class SyntheticHumanProperties {
 
-    int taskExecutorThreadPoolSize;
+    int taskExecutorThreadPoolSize = Runtime.getRuntime().availableProcessors();
 
-    int taskQueueSize;
+    int taskQueueSize = Runtime.getRuntime().availableProcessors() * 2;
 }

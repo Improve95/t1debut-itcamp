@@ -1,1 +1,9 @@
-ru.improve.itcamp.synthetic.human.core.starter.configuration.starter.SyntheticHumanAutoConfig
+ru.improve.itcamp.synthetic.human.core.starter.configuration.ExecutorServiceConfig
+ru.improve.itcamp.synthetic.human.core.starter.configuration.starter.SyntheticHumanProperties
+ru.improve.itcamp.synthetic.human.core.starter.api.controller.CommandController
+ru.improve.itcamp.synthetic.human.core.starter.core.command.impl.DefaultTaskSubmitter
+ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.TaskExecutorFactory
+ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.impl.DefaultImmediatelyTaskExecutor
+ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.impl.DefaultQueueTaskExecutor
+ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.threadPool.ImmediatelyThreadPool
+ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.threadPool.QueueThreadPool
