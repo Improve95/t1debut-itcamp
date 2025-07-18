@@ -1,5 +1,4 @@
-ru.improve.itcamp.synthetic.human.core.starter.configuration.ExecutorServiceConfig
-ru.improve.itcamp.synthetic.human.core.starter.configuration.starter.SyntheticHumanProperties
+ru.improve.itcamp.synthetic.human.core.starter.configuration.starter.SyntheticHumanConfig
 ru.improve.itcamp.synthetic.human.core.starter.api.controller.CommandController
 ru.improve.itcamp.synthetic.human.core.starter.core.command.impl.DefaultTaskSubmitter
 ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.TaskExecutorFactory
@@ -7,3 +6,5 @@ ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.impl.Defaul
 ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.impl.DefaultQueueTaskExecutor
 ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.threadPool.ImmediatelyThreadPool
 ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.threadPool.QueueThreadPool
+ru.improve.itcamp.synthetic.human.core.starter.api.exception.ExceptionResolver
+ru.improve.itcamp.synthetic.human.core.starter.configuration.kafka.KafkaProducerConfiguration

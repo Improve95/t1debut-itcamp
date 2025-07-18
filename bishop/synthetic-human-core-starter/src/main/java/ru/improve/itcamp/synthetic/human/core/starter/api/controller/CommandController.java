@@ -1,5 +1,6 @@
 package ru.improve.itcamp.synthetic.human.core.starter.api.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class CommandController {
     private final TaskSubmitter taskSubmitter;
 
     @PostMapping("/request")
-    public ResponseEntity<CommandResponse> requestCommand(@RequestBody CommandRequest commandRequest) {
+    public ResponseEntity<CommandResponse> requestCommand(@RequestBody @Valid CommandRequest commandRequest) {
         taskSubmitter.executeTask(commandRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }

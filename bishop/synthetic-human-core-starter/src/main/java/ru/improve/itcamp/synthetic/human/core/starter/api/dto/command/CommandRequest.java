@@ -12,12 +12,12 @@ import java.time.LocalDateTime;
 @Builder
 public class CommandRequest {
 
-    @Size(max = 1000)
+    @Size(min = 5, max = 1000)
     private String description;
 
     private CommandPriority priority;
 
-    @Size(max = 100)
+    @Size(min = 5, max = 100)
     private String author;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

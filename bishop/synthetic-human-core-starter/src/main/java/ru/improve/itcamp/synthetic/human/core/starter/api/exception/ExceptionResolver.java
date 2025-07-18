@@ -1,5 +1,6 @@
 package ru.improve.itcamp.synthetic.human.core.starter.api.exception;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,6 +21,7 @@ import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.Error
 import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.NOT_FOUND;
 import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.UNAUTHORIZED;
 
+@RequiredArgsConstructor
 @RestControllerAdvice
 public class ExceptionResolver {
 
@@ -64,7 +66,7 @@ public class ExceptionResolver {
             return resolveDtoException(ex);
         }
         return ErrorCodeMessagePair.of(
-                INTERNAL_SERVER_ERROR, ""
+                INTERNAL_SERVER_ERROR, ex.getMessage()
 //                messageUtil.resolveMessage(messageKeyMap.get(INTERNAL_SERVER_ERROR), null)
         );
     }
@@ -74,9 +76,9 @@ public class ExceptionResolver {
         StringBuilder message = new StringBuilder();
 //        message.append(messageUtil.resolveMessage(messageKeyMap.get(code), ex.getParams()));
 
-//        if (ex.getMessage() != null) {
-//            message.append(": " + messageUtil.resolveMessage(ex.getMessage(), ex.getParams()));
-//        }
+        if (ex.getMessage() != null) {
+            message.append(": " + ex.getMessage());
+        }
 
         if (ex.getCause() != null && ex.getCause().getMessage() != null) {
             message.append(", cause " + ex.getCause().getMessage());
@@ -90,7 +92,7 @@ public class ExceptionResolver {
                         + parameterMessages.messages.stream().collect(Collectors.joining(", ")))
                 .collect(Collectors.joining("; "));
         return ErrorCodeMessagePair.of(
-                ILLEGAL_DTO_VALUE, ""
+                ILLEGAL_DTO_VALUE, message
 //                messageUtil.resolveMessage(messageKeyMap.get(ILLEGAL_DTO_VALUE), message)
         );
     }
@@ -123,6 +125,10 @@ public class ExceptionResolver {
                 message
         );
     }*/
+
+//    public String resolveMessage(String key, String... params) {
+//        return messageSource.getMessage(key, params, key, LocaleContextHolder.getLocale());
+//    }
 
     private record ErrorCodeMessagePair(ErrorCode code, String message) {
         public static ErrorCodeMessagePair of(ErrorCode code, String message) {

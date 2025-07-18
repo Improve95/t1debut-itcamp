@@ -1,7 +1,16 @@
 spring:
   application:
     name: bishop
+  config:
+    import: optional:file:.env[.properties]
 
 synthetic-human:
-  task-executor-thread-pool-size: 4
-  task-queue-size: 8
+  executor:
+    thread-pool-size: 4
+    queue-size: 8
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
+    weyland-topic: "weyland-logging-topic"
+
+KAFKA_HOST: ${KAFKA_OUTSIDE_HOST}
+KAFKA_PORT: ${KAFKA_OUTSIDE_PORT}

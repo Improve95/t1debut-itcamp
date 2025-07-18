@@ -4,17 +4,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.improve.itcamp.synthetic.human.core.starter.configuration.ExecutorServiceConfig;
+import ru.improve.itcamp.synthetic.human.core.starter.configuration.executor.ExecutorConfig;
 
 @RequiredArgsConstructor
 @Configuration
-@EnableConfigurationProperties(SyntheticHumanProperties.class)
+@EnableConfigurationProperties({SyntheticHumanConfig.class, ExecutorConfig.class})
 public class SyntheticHumanAutoConfig {
 
-    private final SyntheticHumanProperties syntheticHumanProperties;
+    private final SyntheticHumanConfig syntheticHumanConfig;
 
     @Bean
-    public ExecutorServiceConfig syntheticHumanConfig() {
-        return new ExecutorServiceConfig(syntheticHumanProperties);
+    public SyntheticHumanConfig syntheticHumanConfig() {
+        return syntheticHumanConfig;
     }
 }
