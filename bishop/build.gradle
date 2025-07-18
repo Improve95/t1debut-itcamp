@@ -18,6 +18,7 @@ repositories {
 }
 
 dependencies {
+	implementation project(':synthetic-human-core-starter')
 }
 
 tasks.named('test') {
