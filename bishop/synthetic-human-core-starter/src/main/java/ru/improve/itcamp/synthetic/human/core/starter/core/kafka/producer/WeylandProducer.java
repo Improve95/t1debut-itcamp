@@ -1,15 +1,13 @@
 package ru.improve.itcamp.synthetic.human.core.starter.core.kafka.producer;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.improve.itcamp.synthetic.human.core.starter.configuration.kafka.KafkaConfig;
 import ru.improve.itcamp.synthetic.human.core.starter.configuration.starter.SyntheticHumanConfig;
 import ru.improve.itcamp.synthetic.human.core.starter.core.kafka.object.KafkaWeylandMessage;
 
-@Slf4j
-@Service
+@Component
 public class WeylandProducer {
 
     private final KafkaConfig kafkaConfig;

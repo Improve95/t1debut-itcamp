@@ -8,20 +8,25 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import ru.improve.itcamp.synthetic.human.core.starter.api.exception.ServiceException;
-import ru.improve.itcamp.synthetic.human.core.starter.core.kafka.object.KafkaWeylandMessage;
-import ru.improve.itcamp.synthetic.human.core.starter.core.kafka.producer.WeylandProducer;
+import ru.improve.itcamp.synthetic.human.core.starter.core.logging.publisher.MethodLoggingPublisher;
 
 import java.time.Instant;
 
 import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.INTERNAL_SERVER_ERROR;
 
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 @Component
 @Aspect
 public class WeylandAspect {
 
-    private final WeylandProducer weylandProducer;
+//    private final String publisherType = "consoleMethodLoggingPublisher";
+
+    private final MethodLoggingPublisher loggingPublisher;
+
+//    public WeylandAspect(@Qualifier(publisherType) MethodLoggingPublisher loggingPublisher) {
+//        this.loggingPublisher = loggingPublisher;
+//    }
 
     @Pointcut("@annotation(ru.improve.itcamp.synthetic.human.core.starter.core.logging.WeylandWatchingYou)")
     public void anyMethodWithWeylandAnnotation() {}
@@ -45,14 +50,12 @@ public class WeylandAspect {
             result = ex;
         }
 
-        weylandProducer.sendActionLog(
-                KafkaWeylandMessage.builder()
-                        .methodName(methodName)
-                        .parameters(joinpoint.getArgs())
-                        .result(result)
-                        .methodStartAt(methodStartAt)
-                        .methodEndAt(Instant.now().toEpochMilli())
-                        .build()
+        loggingPublisher.publishLog(
+                methodName,
+                joinpoint.getArgs(),
+                result,
+                methodStartAt,
+                Instant.now().toEpochMilli()
         );
 
         if (result instanceof Throwable) {

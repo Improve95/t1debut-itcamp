@@ -2,7 +2,7 @@ package ru.improve.itcamp.synthetic.human.core.starter.core.command.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.improve.itcamp.synthetic.human.core.starter.api.dto.command.CommandRequest;
 import ru.improve.itcamp.synthetic.human.core.starter.api.exception.ServiceException;
 import ru.improve.itcamp.synthetic.human.core.starter.core.command.TaskSubmitter;
@@ -13,7 +13,7 @@ import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.Error
 
 @Slf4j
 @RequiredArgsConstructor
-@Service
+@Component
 public class DefaultTaskSubmitter implements TaskSubmitter {
 
     private final TaskExecutorFactory taskExecutorFactory;
@@ -22,14 +22,14 @@ public class DefaultTaskSubmitter implements TaskSubmitter {
     public void executeTask(CommandRequest commandRequest) {
         TaskExecutor taskExecutor = taskExecutorFactory.getTaskExecutor(commandRequest.getPriority());
         taskExecutor.executeTask(() -> {
-//            log.info("command start: {}", commandRequest);
+            log.info("command start: {}", commandRequest);
             try {
                 // эмуляция полезной нагрузки
                 Thread.sleep(10000);
             } catch (InterruptedException ex) {
                 throw new ServiceException(INTERNAL_SERVER_ERROR, ex);
             }
-//            log.info("command end: {}", commandRequest);
+            log.info("command end: {}", commandRequest);
         });
     }
 }

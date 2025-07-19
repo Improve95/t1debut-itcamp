@@ -1,7 +1,7 @@
 package ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.improve.itcamp.synthetic.human.core.starter.api.exception.ServiceException;
 import ru.improve.itcamp.synthetic.human.core.starter.configuration.executor.ExecutorConfig;
 import ru.improve.itcamp.synthetic.human.core.starter.configuration.starter.SyntheticHumanConfig;
@@ -12,7 +12,7 @@ import ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.thre
 import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.ILLEGAL_VALUE;
 
 @Slf4j
-@Service
+@Component
 public class DefaultQueueTaskExecutor implements TaskExecutor {
 
     private final QueueThreadPool threadPool;

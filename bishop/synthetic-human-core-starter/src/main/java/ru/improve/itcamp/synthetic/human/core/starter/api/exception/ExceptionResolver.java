@@ -80,6 +80,7 @@ public class ExceptionResolver {
     }
 
     private List<ParameterMessages> getParametersWithErrorAndMessages(Exception ex) {
+
         if (ex instanceof MethodArgumentNotValidException e) {
             return e.getBindingResult().getFieldErrors().stream()
                     .map(fieldError -> ParameterMessages.of(
@@ -87,17 +88,8 @@ public class ExceptionResolver {
                             List.of(fieldError.getDefaultMessage())
                     ))
                     .toList();
-        } else if (ex instanceof HandlerMethodValidationException e) {
-            /*return e.getAllValidationResults().stream()
-                    .map(parameterValidationResult -> ParameterMessages.of(
-                            parameterValidationResult.getMethodParameter().getParameterName(),
-                            parameterValidationResult.getResolvableErrors().stream()
-                                    .map(MessageSourceResolvable::getDefaultMessage)
-                                    .toList()
-                    ))
-                    .toList();*/
         }
-        return null;
+        return List.of();
     }
 
     private record ErrorCodeMessagePair(ErrorCode code, String message) {
