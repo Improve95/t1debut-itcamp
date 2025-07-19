@@ -1,0 +1,50 @@
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.9.0
+    env_file:
+      - .env
+    container_name: "zookeeper-service"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - ${ZOOKEEPER_OUTSIDE_PORT}:2181
+    networks:
+      - bishop
+
+  kafka:
+    image: confluentinc/cp-kafka:7.9.0
+    env_file:
+      - .env
+    container_name: "kafka-service"
+    depends_on:
+      - zookeeper
+    ports:
+      - ${KAFKA_OUTSIDE_PORT}:${KAFKA_OUTSIDE_PORT}
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:${KAFKA_INSIDE_PORT},EXTERNAL://${KAFKA_OUTSIDE_HOST}:${KAFKA_OUTSIDE_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+    networks:
+      - bishop
+
+#  bishop-service:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    env_file:
+#      - .env
+#    container_name: "bishop-service"
+#    depends_on:
+#      - kafka
+#    networks:
+#      - bishop
+
+networks:
+  bishop:
+    name: bishop-network
+    driver: bridge

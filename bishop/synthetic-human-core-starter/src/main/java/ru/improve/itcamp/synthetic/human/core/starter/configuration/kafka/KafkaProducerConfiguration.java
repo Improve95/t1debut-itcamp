@@ -30,10 +30,8 @@ public class KafkaProducerConfiguration {
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         properties.put(ProducerConfig.ACKS_CONFIG, "1");
-        properties.put(JsonSerializer.TYPE_MAPPINGS, "KafkaWeylandMessage:ru.improve.itcamp.synthetic.human.core.starter.core.logging.kafka.object.KafkaWeylandMessage");
+        properties.put(JsonSerializer.TYPE_MAPPINGS, "KafkaWeylandMessage:ru.improve.itcamp.synthetic.human.core.starter.core.kafka.object.KafkaWeylandMessage");
         properties.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, false);
-        log.info("{}", kafkaConfig);
-//        return new KafkaProducer<>(properties);
-        return null;
+        return new KafkaProducer<>(properties);
     }
 }

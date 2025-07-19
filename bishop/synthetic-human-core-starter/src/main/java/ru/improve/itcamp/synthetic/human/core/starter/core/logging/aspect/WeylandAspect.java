@@ -8,7 +8,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import ru.improve.itcamp.synthetic.human.core.starter.api.exception.ServiceException;
+import ru.improve.itcamp.synthetic.human.core.starter.core.kafka.object.KafkaWeylandMessage;
 import ru.improve.itcamp.synthetic.human.core.starter.core.kafka.producer.WeylandProducer;
+
+import java.time.Instant;
 
 import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.INTERNAL_SERVER_ERROR;
 
@@ -33,6 +36,8 @@ public class WeylandAspect {
                 joinpoint.getArgs()
         );
 
+        long methodStartAt = Instant.now().toEpochMilli();
+
         Object result;
         try {
             result = joinpoint.proceed();
@@ -40,13 +45,15 @@ public class WeylandAspect {
             result = ex;
         }
 
-        /*weylandProducer.sendActionLog(
+        weylandProducer.sendActionLog(
                 KafkaWeylandMessage.builder()
                         .methodName(methodName)
                         .parameters(joinpoint.getArgs())
                         .result(result)
+                        .methodStartAt(methodStartAt)
+                        .methodEndAt(Instant.now().toEpochMilli())
                         .build()
-        );*/
+        );
 
         if (result instanceof Throwable) {
             log.info("aroundMethodWithWeylandAnnotation throw with {}", result);

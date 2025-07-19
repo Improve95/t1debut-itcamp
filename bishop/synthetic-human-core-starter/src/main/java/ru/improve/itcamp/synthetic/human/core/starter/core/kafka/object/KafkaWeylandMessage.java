@@ -12,4 +12,8 @@ public class KafkaWeylandMessage {
     private Object[] parameters;
 
     private Object result;
+
+    private long methodStartAt;
+
+    private long methodEndAt;
 }

@@ -9,8 +9,6 @@ import ru.improve.itcamp.synthetic.human.core.starter.core.command.TaskSubmitter
 import ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.TaskExecutor;
 import ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.TaskExecutorFactory;
 
-import java.util.Random;
-
 import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.INTERNAL_SERVER_ERROR;
 
 @Slf4j
@@ -24,13 +22,14 @@ public class DefaultTaskSubmitter implements TaskSubmitter {
     public void executeTask(CommandRequest commandRequest) {
         TaskExecutor taskExecutor = taskExecutorFactory.getTaskExecutor(commandRequest.getPriority());
         taskExecutor.executeTask(() -> {
-            log.info("command start: {}", commandRequest);
+//            log.info("command start: {}", commandRequest);
             try {
-                Thread.sleep(new Random().nextInt(1000, 5000));
+                // эмуляция полезной нагрузки
+                Thread.sleep(10000);
             } catch (InterruptedException ex) {
                 throw new ServiceException(INTERNAL_SERVER_ERROR, ex);
             }
-            log.info("command end: {}", commandRequest);
+//            log.info("command end: {}", commandRequest);
         });
     }
 }

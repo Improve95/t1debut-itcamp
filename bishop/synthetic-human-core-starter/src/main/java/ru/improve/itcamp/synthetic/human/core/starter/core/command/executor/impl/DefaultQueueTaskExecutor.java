@@ -1,5 +1,6 @@
 package ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.improve.itcamp.synthetic.human.core.starter.api.exception.ServiceException;
 import ru.improve.itcamp.synthetic.human.core.starter.configuration.executor.ExecutorConfig;
@@ -8,8 +9,9 @@ import ru.improve.itcamp.synthetic.human.core.starter.core.command.CommandPriori
 import ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.TaskExecutor;
 import ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.threadPool.QueueThreadPool;
 
-import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.INTERNAL_SERVER_ERROR;
+import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.ILLEGAL_VALUE;
 
+@Slf4j
 @Service
 public class DefaultQueueTaskExecutor implements TaskExecutor {
 
@@ -24,10 +26,17 @@ public class DefaultQueueTaskExecutor implements TaskExecutor {
 
     @Override
     public void executeTask(Runnable task) {
-        if (threadPool.getExecutor().getTaskCount() < executorConfig.getQueueSize()) {
-            threadPool.getExecutor().execute(task);
+        var queue = threadPool.getExecutor().getQueue();
+        if (queue.size() >= executorConfig.getQueueSize()) {
+            throw new ServiceException(ILLEGAL_VALUE, "queue thread is full");
         } else {
-            throw new ServiceException(INTERNAL_SERVER_ERROR);
+            synchronized (this) {
+                if (threadPool.getExecutor().getActiveCount() < executorConfig.getQueueSize()) {
+                    threadPool.getExecutor().execute(task);
+                } else {
+                    throw new ServiceException(ILLEGAL_VALUE, "queue thread is full");
+                }
+            }
         }
     }
 

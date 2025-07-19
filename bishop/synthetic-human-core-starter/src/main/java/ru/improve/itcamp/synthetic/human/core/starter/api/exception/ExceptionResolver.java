@@ -25,17 +25,6 @@ import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.Error
 @RestControllerAdvice
 public class ExceptionResolver {
 
-    /*private static Map<ErrorCode, String> messageKeyMap = Map.of(
-            INTERNAL_SERVER_ERROR, TITLE_INTERNAL_SERVER_ERROR,
-            ALREADY_EXIST, TITLE_ALREADY_EXIST,
-            ILLEGAL_DTO_VALUE, TITLE_ILLEGAL_DTO_VALUE,
-            ILLEGAL_VALUE, TITLE_ILLEGAL_VALUE,
-            NOT_FOUND, TITLE_NOT_FOUND,
-            UNAUTHORIZED, TITLE_UNAUTHORIZED,
-            EXPIRED, TITLE_EXPIRED,
-            ACCESS_DENIED, TITLE_ACCESS_DENIED
-    );*/
-
     private static Map<ErrorCode, HttpStatus> httpStatusMap = Map.of(
             INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR,
             ALREADY_EXIST, HttpStatus.BAD_REQUEST,
@@ -65,16 +54,12 @@ public class ExceptionResolver {
                 ex instanceof HandlerMethodValidationException) {
             return resolveDtoException(ex);
         }
-        return ErrorCodeMessagePair.of(
-                INTERNAL_SERVER_ERROR, ex.getMessage()
-//                messageUtil.resolveMessage(messageKeyMap.get(INTERNAL_SERVER_ERROR), null)
-        );
+        return ErrorCodeMessagePair.of(INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
     private ErrorCodeMessagePair resolveServiceException(ServiceException ex) {
         ErrorCode code = ex.getCode();
         StringBuilder message = new StringBuilder();
-//        message.append(messageUtil.resolveMessage(messageKeyMap.get(code), ex.getParams()));
 
         if (ex.getMessage() != null) {
             message.append(": " + ex.getMessage());
@@ -91,10 +76,7 @@ public class ExceptionResolver {
                 .map(parameterMessages -> parameterMessages.parameter + " "
                         + parameterMessages.messages.stream().collect(Collectors.joining(", ")))
                 .collect(Collectors.joining("; "));
-        return ErrorCodeMessagePair.of(
-                ILLEGAL_DTO_VALUE, message
-//                messageUtil.resolveMessage(messageKeyMap.get(ILLEGAL_DTO_VALUE), message)
-        );
+        return ErrorCodeMessagePair.of(ILLEGAL_DTO_VALUE, message);
     }
 
     private List<ParameterMessages> getParametersWithErrorAndMessages(Exception ex) {
@@ -106,29 +88,17 @@ public class ExceptionResolver {
                     ))
                     .toList();
         } else if (ex instanceof HandlerMethodValidationException e) {
-//            return e.getAllValidationResults().stream()
-//                    .map(parameterValidationResult -> ParameterMessages.of(
-//                            parameterValidationResult.getMethodParameter().getParameterName(),
-//                            parameterValidationResult.getResolvableErrors().stream()
-//                                    .map(MessageSourceResolvable::getDefaultMessage)
-//                                    .toList()
-//                    ))
-//                    .toList();
+            /*return e.getAllValidationResults().stream()
+                    .map(parameterValidationResult -> ParameterMessages.of(
+                            parameterValidationResult.getMethodParameter().getParameterName(),
+                            parameterValidationResult.getResolvableErrors().stream()
+                                    .map(MessageSourceResolvable::getDefaultMessage)
+                                    .toList()
+                    ))
+                    .toList();*/
         }
         return null;
     }
-
-   /* private ErrorCodeMessagePair resolveAccessDeniedException(AuthorizationDeniedException ex) {
-        String message = messageUtil.resolveMessage(messageKeyMap.get(UNAUTHORIZED), null) + ": " + ex.getMessage();
-        return ErrorCodeMessagePair.of(
-                UNAUTHORIZED,
-                message
-        );
-    }*/
-
-//    public String resolveMessage(String key, String... params) {
-//        return messageSource.getMessage(key, params, key, LocaleContextHolder.getLocale());
-//    }
 
     private record ErrorCodeMessagePair(ErrorCode code, String message) {
         public static ErrorCodeMessagePair of(ErrorCode code, String message) {
