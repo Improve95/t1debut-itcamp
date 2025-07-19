@@ -8,3 +8,5 @@ ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.threadPool.
 ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.threadPool.QueueThreadPool
 ru.improve.itcamp.synthetic.human.core.starter.api.exception.ExceptionResolver
 ru.improve.itcamp.synthetic.human.core.starter.configuration.kafka.KafkaProducerConfiguration
+ru.improve.itcamp.synthetic.human.core.starter.core.logging.aspect.WeylandAspect
+ru.improve.itcamp.synthetic.human.core.starter.core.kafka.producer.WeylandProducer

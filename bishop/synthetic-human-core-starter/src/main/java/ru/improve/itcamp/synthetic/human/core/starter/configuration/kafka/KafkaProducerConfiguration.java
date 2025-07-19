@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import ru.improve.itcamp.synthetic.human.core.starter.configuration.starter.SyntheticHumanConfig;
-import ru.improve.itcamp.synthetic.human.core.starter.core.logging.kafka.object.KafkaWeylandMessage;
+import ru.improve.itcamp.synthetic.human.core.starter.core.kafka.object.KafkaWeylandMessage;
 
 import java.util.HashMap;
 import java.util.Map;

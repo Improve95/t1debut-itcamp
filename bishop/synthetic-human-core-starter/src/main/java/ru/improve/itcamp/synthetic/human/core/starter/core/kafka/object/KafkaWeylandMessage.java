@@ -1,4 +1,4 @@
-package ru.improve.itcamp.synthetic.human.core.starter.core.logging.kafka.object;
+package ru.improve.itcamp.synthetic.human.core.starter.core.kafka.object;
 
 import lombok.Builder;
 import lombok.Data;
