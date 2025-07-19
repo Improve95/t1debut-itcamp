@@ -1,3 +1,5 @@
 docker exec -it kafka-service bash /usr/bin/kafka-topics --bootstrap-server kafka:29092 --create --topic weyland-logging-topic --partitions 1 --replication-factor 1
 docker exec -it kafka-service bash /usr/bin/kafka-configs --bootstrap-server kafka:29092 --alter --entity-type topics --entity-name weyland-logging-topic --add-config retention.ms=120000
 docker exec -it kafka-service bash /usr/bin/kafka-console-consumer --topic weyland-logging-topic --bootstrap-server kafka:29092 --from-beginning
+
+docker run -p 3000:3000 --name grafana-service --user "$(id -u)" --volume ./grafana/data:/var/lib/grafana grafana/grafana:12.0.2

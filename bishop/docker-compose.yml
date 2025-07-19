@@ -44,6 +44,32 @@ services:
 #    networks:
 #      - bishop
 
+  victoria-metrics:
+    image: victoriametrics/victoria-metrics:v1.121.0
+    env_file:
+      - .env
+    container_name: "victoria-metrics-service"
+    ports:
+      - ${VICTORIA_OUTSIDE_PORT}:8428
+    volumes:
+      - ./promscrape.yaml:/promscrape.yaml
+    command:
+      - -promscrape.config=promscrape.yaml
+    networks:
+      - bishop
+
+  grafana:
+    image: grafana/grafana:12.0.2
+    env_file:
+      - .env
+    container_name: "grafana-service"
+    ports:
+      - ${GRAFANA_OUTSIDE_PORT}:3000
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+    networks:
+      - bishop
+
 networks:
   bishop:
     name: bishop-network
