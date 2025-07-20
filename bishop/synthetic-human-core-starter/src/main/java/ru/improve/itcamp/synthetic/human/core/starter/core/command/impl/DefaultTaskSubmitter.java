@@ -8,6 +8,7 @@ import ru.improve.itcamp.synthetic.human.core.starter.api.exception.ServiceExcep
 import ru.improve.itcamp.synthetic.human.core.starter.core.command.TaskSubmitter;
 import ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.TaskExecutor;
 import ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.TaskExecutorFactory;
+import ru.improve.itcamp.synthetic.human.core.starter.core.command.object.TaskInfo;
 
 import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.INTERNAL_SERVER_ERROR;
 
@@ -21,15 +22,20 @@ public class DefaultTaskSubmitter implements TaskSubmitter {
     @Override
     public void executeTask(CommandRequest commandRequest) {
         TaskExecutor taskExecutor = taskExecutorFactory.getTaskExecutor(commandRequest.getPriority());
-        taskExecutor.executeTask(() -> {
-            log.info("command start: {}", commandRequest);
-            try {
-                // эмуляция полезной нагрузки
-                Thread.sleep(10000);
-            } catch (InterruptedException ex) {
-                throw new ServiceException(INTERNAL_SERVER_ERROR, ex);
-            }
-            log.info("command end: {}", commandRequest);
-        });
+        taskExecutor.executeTask(
+                TaskInfo.builder()
+                        .author(commandRequest.getAuthor())
+                        .command(() -> {
+                            log.info("command start: {}", commandRequest);
+                            try {
+                                // эмуляция полезной нагрузки
+                                 Thread.sleep(10000);
+                            } catch (InterruptedException ex) {
+                                throw new ServiceException(INTERNAL_SERVER_ERROR, ex);
+                            }
+                            log.info("command end: {}", commandRequest);
+                        })
+                        .build()
+        );
     }
 }

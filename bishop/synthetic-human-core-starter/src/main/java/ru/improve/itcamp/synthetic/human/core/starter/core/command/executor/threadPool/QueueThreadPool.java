@@ -27,6 +27,12 @@ public class QueueThreadPool {
         executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(executorConfig.getThreadPoolSize());
     }
 
+
+    public int getQueueSize() {
+        return executor.getQueue().size();
+    }
+
+
     @PreDestroy
     public void stopExecutorService() {
         executor.shutdown();

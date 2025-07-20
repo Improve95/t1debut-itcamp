@@ -20,22 +20,16 @@ import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.Error
 @Aspect
 public class WeylandAspect {
 
-//    private final String publisherType = "consoleMethodLoggingPublisher";
-
     private final MethodLoggingPublisher loggingPublisher;
-
-//    public WeylandAspect(@Qualifier(publisherType) MethodLoggingPublisher loggingPublisher) {
-//        this.loggingPublisher = loggingPublisher;
-//    }
 
     @Pointcut("@annotation(ru.improve.itcamp.synthetic.human.core.starter.core.logging.WeylandWatchingYou)")
     public void anyMethodWithWeylandAnnotation() {}
 
-    @Around(value = "anyMethodWithWeylandAnnotation()")
+    @Around("anyMethodWithWeylandAnnotation()")
     public Object aroundAnyMethodWithWeylandAnnotation(ProceedingJoinPoint joinpoint) {
         String[] methodNameSplit = joinpoint.getSignature().toString().split("\\.");
         String methodName = methodNameSplit[methodNameSplit.length - 1];
-        log.info(
+        log.trace(
                 "aroundMethodWithWeylandAnnotation start with: {} -||- {}",
                 methodName,
                 joinpoint.getArgs()
@@ -59,11 +53,11 @@ public class WeylandAspect {
         );
 
         if (result instanceof Throwable) {
-            log.info("aroundMethodWithWeylandAnnotation throw with {}", result);
+            log.trace("aroundMethodWithWeylandAnnotation throw with {}", result);
             throw new ServiceException(INTERNAL_SERVER_ERROR, (Throwable) result);
         }
 
-        log.info("aroundMethodWithWeylandAnnotation end with {}", result);
+        log.trace("aroundMethodWithWeylandAnnotation end with {}", result);
         return result;
     }
 }

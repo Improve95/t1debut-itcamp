@@ -8,6 +8,7 @@ import ru.improve.itcamp.synthetic.human.core.starter.configuration.starter.Synt
 import ru.improve.itcamp.synthetic.human.core.starter.core.command.CommandPriority;
 import ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.TaskExecutor;
 import ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.threadPool.QueueThreadPool;
+import ru.improve.itcamp.synthetic.human.core.starter.core.command.object.TaskInfo;
 
 import static ru.improve.itcamp.synthetic.human.core.starter.api.exception.ErrorCode.ILLEGAL_VALUE;
 
@@ -25,14 +26,13 @@ public class DefaultQueueTaskExecutor implements TaskExecutor {
     }
 
     @Override
-    public void executeTask(Runnable task) {
-        var queue = threadPool.getExecutor().getQueue();
-        if (queue.size() >= executorConfig.getQueueSize()) {
+    public void executeTask(TaskInfo taskInfo) {
+        if (threadPool.getQueueSize() >= executorConfig.getQueueSize()) {
             throw new ServiceException(ILLEGAL_VALUE, "queue thread is full");
         } else {
             synchronized (this) {
                 if (threadPool.getExecutor().getActiveCount() < executorConfig.getQueueSize()) {
-                    threadPool.getExecutor().execute(task);
+                    threadPool.getExecutor().execute(taskInfo.getCommand());
                 } else {
                     throw new ServiceException(ILLEGAL_VALUE, "queue thread is full");
                 }
