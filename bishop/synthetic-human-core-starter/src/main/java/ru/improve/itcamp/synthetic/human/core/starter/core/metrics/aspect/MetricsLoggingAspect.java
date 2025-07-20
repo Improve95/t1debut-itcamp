@@ -4,7 +4,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -31,8 +31,8 @@ public class MetricsLoggingAspect {
     public void anyMethodWithExecuteTaskName(){}
 
     @AfterReturning("anyMethodWithInterfaceTaskExecutor() && anyMethodWithExecuteTaskName()")
-    public void afterReturningAnyMethodWhichExecuteCommand(ProceedingJoinPoint joinPointProceed) {
-        TaskInfo taskInfo = (TaskInfo) joinPointProceed.getArgs()[0];
+    public void afterReturningAnyMethodWhichExecuteCommand(JoinPoint joinPoint) {
+        TaskInfo taskInfo = (TaskInfo) joinPoint.getArgs()[0];
         meterRegistry.counter(
                     metricsNameConfig.getCounterRequestByNameCounter(),
                     List.of(Tag.of("author", taskInfo.getAuthor()))

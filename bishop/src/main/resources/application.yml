@@ -9,8 +9,8 @@ spring:
 
 synthetic-human:
   executor:
-    thread-pool-size: 2
-    queue-size: 1
+    thread-pool-size: 1
+    queue-size: 10
   kafka:
     bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
     weyland-topic: "weyland-logging-topic"

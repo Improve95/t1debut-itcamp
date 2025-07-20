@@ -28,7 +28,14 @@ http://localhost:8080/commands/request
 {
     "description": "description",
     "priority": "COMMON",
-    "author": "author name",
+    "author": "author1",
     "time": "2000-10-31T01:30:00.000"
 }
+````
+
+7) Метрики можно посмотреть через графану по адресу localhost:3000
+````
+название метрик:
+ для потоков: queue_task_meter
+ для команд от авторов: counter_request_by_name (аккумуляция на стороне системы мониторинга)
 ````

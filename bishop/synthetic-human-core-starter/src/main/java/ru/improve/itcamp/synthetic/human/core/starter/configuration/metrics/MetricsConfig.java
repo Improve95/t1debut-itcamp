@@ -21,7 +21,7 @@ public class MetricsConfig {
                     .register(meterRegistry);
 
             Counter.builder(metricsNameConfig.getCounterRequestByNameCounter())
-                    .tags("author", "user")
+                    .tag("author", "user")
                     .register(meterRegistry);
         };
     }

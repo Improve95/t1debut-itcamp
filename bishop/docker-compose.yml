@@ -32,23 +32,29 @@ services:
     networks:
       - bishop
 
-#  bishop-service:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    env_file:
-#      - .env
-#    container_name: "bishop-service"
-#    depends_on:
-#      - kafka
-#    networks:
-#      - bishop
+  bishop-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    container_name: "bishop-service"
+    depends_on:
+      - kafka
+#    environment:
+#      - PROMETHEUS_TARGET=http://${PROMETHEUS_OUTSIDE_TARGET}:${BISHOP_PORT}
+    ports:
+      - ${BISHOP_PORT}:${BISHOP_PORT}
+    networks:
+      - bishop
 
   victoria-metrics:
     image: victoriametrics/victoria-metrics:v1.121.0
     env_file:
       - .env
     container_name: "victoria-metrics-service"
+    depends_on:
+      - bishop-service
     ports:
       - ${VICTORIA_OUTSIDE_PORT}:8428
     volumes:
@@ -63,6 +69,8 @@ services:
     env_file:
       - .env
     container_name: "grafana-service"
+    depends_on:
+      - victoria-metrics
     ports:
       - ${GRAFANA_OUTSIDE_PORT}:3000
     volumes:
