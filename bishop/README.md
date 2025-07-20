@@ -21,7 +21,11 @@ http://localhost:8080/bishop/weyland
 docker exec -it kafka-service bash /usr/bin/kafka-console-consumer --topic weyland-logging-topic --bootstrap-server kafka:29092 --from-beginning
 ````
 
-5.1) переключить на консоль можно в application.yml изменив publisher-type на console
+5.1) переключение вывода логов происходит через параметр
+````
+--synthetic-human.logging.publisher-type=kafka|console
+````
+при запуске приложения в докере
 
 6) Api вызова команд:
 ````

@@ -32,7 +32,7 @@ services:
     networks:
       - bishop
 
-  bishop-service:
+  bishop:
     build:
       context: .
       dockerfile: Dockerfile
@@ -52,7 +52,7 @@ services:
       - .env
     container_name: "victoria-metrics-service"
     depends_on:
-      - bishop-service
+      - bishop
     ports:
       - ${VICTORIA_OUTSIDE_PORT}:8428
     volumes:

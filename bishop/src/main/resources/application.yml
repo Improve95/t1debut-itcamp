@@ -15,7 +15,7 @@ synthetic-human:
     bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
     weyland-topic: "weyland-logging-topic"
   logging:
-    publisher-type: kafka
+    publisher-type: ${PUBLISHER_TYPE}
 
 KAFKA_HOST: ${KAFKA_OUTSIDE_HOST}
 KAFKA_PORT: ${KAFKA_OUTSIDE_PORT}

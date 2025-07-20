@@ -1,5 +1,6 @@
 package ru.improve.itcamp.synthetic.human.core.starter.configuration.logging;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.improve.itcamp.synthetic.human.core.starter.configuration.starter.SyntheticHumanConfig;
@@ -11,6 +12,7 @@ import ru.improve.itcamp.synthetic.human.core.starter.core.logging.publisher.imp
 
 import java.util.Map;
 
+@Slf4j
 @Configuration
 public class PublisherConfig {
 
@@ -25,6 +27,8 @@ public class PublisherConfig {
 
     @Bean
     public MethodLoggingPublisher methodLoggingPublisher(SyntheticHumanConfig syntheticHumanConfig) {
-        return publisherMap.get(syntheticHumanConfig.getLogging().getPublisherType());
+        PublisherType publisherType = syntheticHumanConfig.getLogging().getPublisherType();
+        log.info("log publication destionation - {}", publisherType);
+        return publisherMap.get(publisherType);
     }
 }
