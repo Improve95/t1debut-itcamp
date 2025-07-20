@@ -4,6 +4,8 @@ WORKDIR /bishop-service
 COPY src src
 COPY build.gradle .
 COPY settings.gradle .
+COPY .env .
+COPY customStarter customStarter
 
 RUN gradle build
 

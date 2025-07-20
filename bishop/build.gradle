@@ -15,13 +15,30 @@ java {
 
 repositories {
 	mavenCentral()
+	flatDir {
+		dirs 'customStarter'
+	}
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
+	/* наверняка есть способ показать какие зависимости использует стартер */
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.kafka:spring-kafka'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	implementation 'io.micrometer:micrometer-registry-prometheus'
+
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
+	annotationProcessor'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2'
+
+	implementation 'jakarta.validation:jakarta.validation-api:3.1.0'
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	implementation project(':synthetic-human-core-starter')
+	implementation name: 'synthetic-human-core-starter-0.0.1-SNAPSHOT-plain'
+//	implementation project(':synthetic-human-core-starter')
 }

@@ -3,3 +3,4 @@ scrape_configs:
     static_configs:
       - targets: ["http://bishop-service:8060"]
     metrics_path: "/actuator/prometheus"
+#bishop-service

@@ -41,8 +41,6 @@ services:
     container_name: "bishop-service"
     depends_on:
       - kafka
-#    environment:
-#      - PROMETHEUS_TARGET=http://${PROMETHEUS_OUTSIDE_TARGET}:${BISHOP_PORT}
     ports:
       - ${BISHOP_PORT}:${BISHOP_PORT}
     networks:

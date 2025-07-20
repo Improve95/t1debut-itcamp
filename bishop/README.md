@@ -21,6 +21,8 @@ http://localhost:8080/bishop/weyland
 docker exec -it kafka-service bash /usr/bin/kafka-console-consumer --topic weyland-logging-topic --bootstrap-server kafka:29092 --from-beginning
 ````
 
+5.1) переключить на консоль можно в application.yml изменив publisher-type на console
+
 6) Api вызова команд:
 ````
 http://localhost:8080/commands/request
