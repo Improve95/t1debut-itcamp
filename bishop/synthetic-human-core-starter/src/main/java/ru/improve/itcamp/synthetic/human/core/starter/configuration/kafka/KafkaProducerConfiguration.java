@@ -23,6 +23,7 @@ public class KafkaProducerConfiguration {
         this.kafkaConfig = syntheticHumanConfig.getKafka();
     }
 
+    //todo отключить создание продюсера если выбрана консоль
     @Bean
     public KafkaProducer<String, KafkaWeylandMessage> weylandMessageKafkaProducer() {
         Map<String, Object> properties = new HashMap<>();
