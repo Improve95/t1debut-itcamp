@@ -1,0 +1,55 @@
+services:
+  auth_db_postgres:
+    container_name: "auth-postgres"
+    env_file:
+      - .env
+    image: 'postgres:16.4'
+    environment:
+      POSTGRES_USER: ${AUTH_PG_USER}
+      POSTGRES_PASSWORD: ${AUTH_PG_PASSWORD}
+      POSTGRES_DB: ${AUTH_PG_DATABASE}
+    ports:
+      - "${AUTH_PG_PORT}:5432"
+    networks:
+      - auth_service_network
+
+  auth_flyway:
+    container_name: "auth-flyway"
+    env_file:
+      - .env
+    environment:
+      FLYWAY_URL: jdbc:postgresql://auth_db_postgres:5432/${AUTH_PG_DATABASE}
+      FLYWAY_USER: ${AUTH_PG_USER}
+      FLYWAY_PASSWORD: ${AUTH_PG_PASSWORD}
+    command:
+      - migrate
+    volumes:
+      - ./manage-service/src/main/resources/flyway/migrations:/flyway/sql
+    image: 'flyway/flyway:11.4'
+    depends_on:
+      auth_db_postgres:
+        condition: service_started
+        restart: true
+    networks:
+      - auth_service_network
+
+  auth-service:
+    build:
+      dockerfile: Dockerfile
+    container_name: "auth-service"
+    env_file:
+      - .env
+    environment:
+      AUTH_PG_HOST: auth_db_postgres
+      AUTH_PG_PORT: 5432
+    ports:
+      - "${AUTH_SERVICE_PORT}:8080"
+    depends_on:
+      - auth_db_postgres
+    networks:
+      - auth_service_network
+
+networks:
+  auth_service_network:
+    name: "auth-network"
+    driver: bridge

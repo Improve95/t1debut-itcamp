@@ -24,13 +24,16 @@ public class MetricsLoggingAspect {
 
     private final MeterRegistry meterRegistry;
 
-    @Pointcut("within(ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.TaskExecutor+)")
-    public void anyMethodWithInterfaceTaskExecutor(){}
+//    @Pointcut("within(ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.TaskExecutor+)")
+//    public void anyMethodWithInterfaceTaskExecutor(){}
 
-    @Pointcut("execution(* executeTask(ru.improve.itcamp.synthetic.human.core.starter.core.command.object.TaskInfo))")
-    public void anyMethodWithExecuteTaskName(){}
+//    @Pointcut("execution(* executeTask(ru.improve.itcamp.synthetic.human.core.starter.core.command.object.TaskInfo))")
+//    public void anyMethodWithExecuteTaskName(){}
 
-    @AfterReturning("anyMethodWithInterfaceTaskExecutor() && anyMethodWithExecuteTaskName()")
+    @Pointcut("target(ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.impl.DefaultQueueTaskExecutor)")
+    public void anyMethodWithInterfaceTaskExecutor() {}
+
+    @AfterReturning("anyMethodWithInterfaceTaskExecutor()")
     public void afterReturningAnyMethodWhichExecuteCommand(JoinPoint joinPoint) {
         TaskInfo taskInfo = (TaskInfo) joinPoint.getArgs()[0];
         meterRegistry.counter(

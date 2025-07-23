@@ -22,7 +22,7 @@ public class WeylandAspect {
 
     private final MethodLoggingPublisher loggingPublisher;
 
-    @Pointcut("@annotation(ru.improve.itcamp.synthetic.human.core.starter.core.logging.WeylandWatchingYou)")
+//    @Pointcut("@annotation(ru.improve.itcamp.synthetic.human.core.starter.core.logging.WeylandWatchingYou)")
     public void anyMethodWithWeylandAnnotation() {}
 
     @Around("anyMethodWithWeylandAnnotation()")
