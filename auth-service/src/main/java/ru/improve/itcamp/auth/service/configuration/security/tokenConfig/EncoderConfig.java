@@ -1,8 +1,9 @@
 package ru.improve.itcamp.auth.service.configuration.security.tokenConfig;
 
-import com.nimbusds.jose.crypto.RSAEncrypter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
+import com.nimbusds.jose.EncryptionMethod;
+import com.nimbusds.jose.JWEAlgorithm;
+import com.nimbusds.jose.JWEHeader;
+import lombok.Getter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -12,7 +13,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
-import java.security.interfaces.RSAPublicKey;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
@@ -20,24 +20,28 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.stream.Collectors;
 
-import static ru.improve.itcamp.auth.service.configuration.security.tokenConfig.CoderNames.ACCESS_TOKEN_CODER;
-
-@RequiredArgsConstructor
 @Configuration
 public class EncoderConfig {
 
     public static final String JWE_ENCODER = "_jwe_encoder";
 
+    public static final JWEHeader jweHeader = new JWEHeader.Builder(JWEAlgorithm.RSA_OAEP_256, EncryptionMethod.A256GCM)
+            .contentType("JWT")
+            .build();
+
     private final ResourceLoader resourceLoader;
 
-    @Bean(name = ACCESS_TOKEN_CODER + JWE_ENCODER)
-    public RSAEncrypter clientJweEncoder() {
-        return new RSAEncrypter((RSAPublicKey) getPublicKey());
+    @Getter
+    private final PublicKey publicKey;
+
+    public EncoderConfig(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+        this.publicKey = createPublicKey();
     }
 
-    private PublicKey getPublicKey() {
+    private PublicKey createPublicKey() {
         try {
-            Resource resource = resourceLoader.getResource("classpath:resources/keys/public/auth-public.pem");
+            Resource resource = resourceLoader.getResource("classpath:/keys/public/auth-public.pem");
             String[] splitedKey = resource.getContentAsString(StandardCharsets.UTF_8).split("\\n");
             String decoded = Arrays.stream(splitedKey)
                     .skip(1)
@@ -49,4 +53,9 @@ public class EncoderConfig {
             throw new RuntimeException(ex);
         }
     }
+
+    //    @Bean(name = ACCESS_TOKEN_CODER + JWE_ENCODER)
+//    public RSAEncrypter clientJweEncoder() {
+//        return new RSAEncrypter((RSAPublicKey) getPublicKey());
+//    }
 }

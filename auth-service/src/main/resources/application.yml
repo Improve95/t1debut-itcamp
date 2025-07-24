@@ -17,9 +17,15 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        
+
 app:
   token:
     access:
       secret: ${secret.client}
       duration: 15m
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

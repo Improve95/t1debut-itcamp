@@ -10,4 +10,6 @@ public final class MessageKeys {
     public static final String TITLE_ALREADY_EXIST = "title.already_exist";
     public static final String TITLE_ACCESS_DENIED = "title.access_denied";
     public static final String TITLE_UNAUTHORIZED = "title.unauthorized";
+
+    public static final String SWAGGER_SECURITY_SCHEME_NAME = "swagger.security_scheme_name";
 }

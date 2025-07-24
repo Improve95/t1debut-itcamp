@@ -24,7 +24,7 @@ services:
     command:
       - migrate
     volumes:
-      - ./manage-service/src/main/resources/flyway/migrations:/flyway/sql
+      - ./src/main/resources/migrations:/flyway/sql
     image: 'flyway/flyway:11.4'
     depends_on:
       auth_db_postgres:
@@ -33,7 +33,7 @@ services:
     networks:
       - auth_service_network
 
-#  auth-service:
+#  auth_service:
 #    build:
 #      dockerfile: Dockerfile
 #    container_name: "auth-service"
