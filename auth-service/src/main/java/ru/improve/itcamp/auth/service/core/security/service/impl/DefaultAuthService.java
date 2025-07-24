@@ -16,17 +16,17 @@ public class DefaultAuthService implements AuthService {
 
     @Override
     public boolean setAuthentication(HttpServletRequest request, HttpServletResponse response) {
-
+        return true;
     }
 
     @Override
     public SignInResponse signIn(SignInRequest signInRequest) {
-
+        return null;
     }
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
-
+        return null;
     }
 
     @Override

@@ -67,12 +67,15 @@ public class AuthConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             AuthService authService,
-            CustomAuthEntryPoint customAuthEntryPoint) throws Exception {
-
+            CustomAuthEntryPoint customAuthEntryPoint
+    ) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         auth -> auth
+                                .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
+
                                 .requestMatchers(HttpMethod.POST, AUTH + SIGN_IN).permitAll()
                                 .requestMatchers(HttpMethod.POST, AUTH + LOGIN).permitAll()
                                 .anyRequest().authenticated()

@@ -447,4 +447,4 @@ gradle-app.setting
 
 #Project
 *.docx
-keys
+auth-private.pem
