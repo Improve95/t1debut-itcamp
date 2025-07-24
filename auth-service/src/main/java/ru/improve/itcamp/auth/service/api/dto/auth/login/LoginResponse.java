@@ -12,4 +12,6 @@ public class LoginResponse {
     private long id;
 
     private String accessToken;
+
+    private String refreshToken;
 }

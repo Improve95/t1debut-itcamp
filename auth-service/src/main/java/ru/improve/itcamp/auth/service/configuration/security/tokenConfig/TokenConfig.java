@@ -11,5 +11,9 @@ public class TokenConfig {
 
     AccessTokenConfig access;
 
+    RefreshTokenConfig refresh;
+
     public record AccessTokenConfig(String secret, Duration duration) {}
+
+    public record RefreshTokenConfig(String secret, Duration duration) {}
 }

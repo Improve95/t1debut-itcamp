@@ -10,4 +10,6 @@ public interface UserService {
     User saveUser(User user);
 
     UserResponse getUserByAuth();
+
+    User findUser(int id);
 }

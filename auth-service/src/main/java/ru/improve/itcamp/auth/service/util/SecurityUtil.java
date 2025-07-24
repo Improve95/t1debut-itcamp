@@ -28,9 +28,15 @@ public final class SecurityUtil {
 
     public static final String ADMIN_ROLE = "ROLE_ADMIN";
 
-    public static final String PUBLIC_KEY_FILE_PATH = "classpath:/keys/public/auth-public.pem";
+    public static final String PUBLIC_KEY_FILE_PATH = "classpath:/keys/public/";
 
-    public static final String PRIVATE_KEY_FILE_PATH = "classpath:/keys/private/auth-private.pem";
+    public static final String PRIVATE_KEY_FILE_PATH = "classpath:/keys/private/";
+
+    public static final String PUBLIC_KEY = "-public";
+
+    public static final String PRIVATE_KEY = "-private";
+
+    public static final String KEY_FILE_EXTENSION = ".pem";
 
     public static JwtClaimsSet createClaims(
             User user,

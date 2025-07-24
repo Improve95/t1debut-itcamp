@@ -1,4 +1,4 @@
-package ru.improve.itcamp.auth.service.model;
+package ru.improve.itcamp.auth.service.model.token;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,14 +9,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.improve.itcamp.auth.service.model.User;
 
 @Entity
 @Data
-@Table(name = "white_list_access_tokens")
+@Table(name = "white_list_refresh_tokens")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AccessToken  {
+public class RefreshToken implements TokenInterface {
 
     @Id
     protected String token;

@@ -18,6 +18,8 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.improve.itcamp.auth.service.model.token.AccessToken;
+import ru.improve.itcamp.auth.service.model.token.RefreshToken;
 
 import java.util.Collection;
 import java.util.List;
@@ -52,6 +54,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<AccessToken> accessTokens;
+
+    @OneToMany(mappedBy = "user")
+    private List<RefreshToken> refreshTokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

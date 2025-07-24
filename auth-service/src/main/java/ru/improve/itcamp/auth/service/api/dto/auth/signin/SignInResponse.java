@@ -10,6 +10,4 @@ import lombok.extern.jackson.Jacksonized;
 public class SignInResponse {
 
     private int id;
-
-    private String accessToken;
 }

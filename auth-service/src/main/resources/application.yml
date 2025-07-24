@@ -13,7 +13,7 @@ spring:
     password: ${AUTH_PG_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
@@ -21,11 +21,15 @@ spring:
 app:
   token:
     access:
-      secret: ${secret.client}
+      secret: ${ACCESS_KEY_FILE_NAME}
       duration: 15m
+    refresh:
+      secret: ${REFRESH_KEY_FILE_NAME}
+      duration: 10D
+
 
 logging:
   level:
     org:
       springframework:
-        security: DEBUG
+        security: ERROR

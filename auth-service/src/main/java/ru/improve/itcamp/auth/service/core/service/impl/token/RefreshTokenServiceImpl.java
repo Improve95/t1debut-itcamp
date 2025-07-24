@@ -3,14 +3,14 @@ package ru.improve.itcamp.auth.service.core.service.impl.token;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.improve.itcamp.auth.service.core.repository.AccessTokenRepository;
+import ru.improve.itcamp.auth.service.core.repository.RefreshTokenRepository;
 import ru.improve.itcamp.auth.service.core.service.TokenService;
 
 @RequiredArgsConstructor
 @Service
-public class AccessTokenServiceImpl implements TokenService {
+public class RefreshTokenServiceImpl implements TokenService {
 
-    private final AccessTokenRepository tokenRepository;
+    private final RefreshTokenRepository tokenRepository;
 
     @Transactional
     @Override

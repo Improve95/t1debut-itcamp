@@ -33,21 +33,21 @@ services:
     networks:
       - auth_service_network
 
-#  auth_service:
-#    build:
-#      dockerfile: Dockerfile
-#    container_name: "auth-service"
-#    env_file:
-#      - .env
-#    environment:
-#      AUTH_PG_HOST: auth_db_postgres
-#      AUTH_PG_PORT: 5432
-#    ports:
-#      - "${AUTH_SERVICE_PORT}:8080"
-#    depends_on:
-#      - auth_db_postgres
-#    networks:
-#      - auth_service_network
+  auth_service:
+    build:
+      dockerfile: Dockerfile
+    container_name: "auth-service"
+    env_file:
+      - .env
+    environment:
+      AUTH_PG_HOST: auth_db_postgres
+      AUTH_PG_PORT: 5432
+    ports:
+      - "${AUTH_SERVICE_PORT}:8080"
+    depends_on:
+      - auth_db_postgres
+    networks:
+      - auth_service_network
 
 networks:
   auth_service_network:

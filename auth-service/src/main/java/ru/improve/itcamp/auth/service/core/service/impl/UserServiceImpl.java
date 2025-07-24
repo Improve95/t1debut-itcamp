@@ -35,9 +35,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserResponse getUser(int id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ServiceException(NOT_FOUND, "user", "id"));
-        return userMapper.toUserResponse(user);
+        return userMapper.toUserResponse(findUser(id));
     }
 
     @Transactional
@@ -51,5 +49,12 @@ public class UserServiceImpl implements UserService {
             }
             throw new ServiceException(INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    @Transactional
+    @Override
+    public User findUser(int id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ServiceException(NOT_FOUND, "user", "id"));
     }
 }
