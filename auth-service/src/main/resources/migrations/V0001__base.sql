@@ -19,8 +19,7 @@ create table user_role (
     primary key (user_id, role_id)
 );
 
-insert into users(email, password, name, employment)
-values ('email1@gmail.com', 'password1', 'name1');
+insert into users(email, password, name) values ('email1@gmail.com', 'password1', 'name1');
 
 insert into user_role(user_id, role_id) values (1, 1),
                                                (1, 3);

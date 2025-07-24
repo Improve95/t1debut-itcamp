@@ -3,7 +3,6 @@ package ru.improve.itcamp.auth.service.core.service.impl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.improve.itcamp.auth.service.api.dto.user.UserResponse;
@@ -28,6 +27,13 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
+    public UserResponse getUserByAuth() {
+        int userId = (int) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return getUser(userId);
+    }
+
+    @Transactional
+    @Override
     public UserResponse getUser(int id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(NOT_FOUND, "user", "id"));
@@ -45,12 +51,5 @@ public class UserServiceImpl implements UserService {
             }
             throw new ServiceException(INTERNAL_SERVER_ERROR, ex);
         }
-    }
-
-    @Override
-    public UserResponse getUserByAuth() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-//        UserDetails userDetails = (UserDetails) securityContext.getAuthentication().getPrincipal();
-        return null;
     }
 }

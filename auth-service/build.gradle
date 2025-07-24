@@ -25,7 +25,7 @@ flyway {
     url = "jdbc:postgresql://${env.fetch('AUTH_PG_HOST')}:${env.fetch('AUTH_PG_PORT')}/${env.fetch('AUTH_PG_DATABASE')}"
     user = env.fetch('AUTH_PG_USER')
     password = env.fetch('AUTH_PG_PASSWORD')
-    locations = ['classpath:flyway/migrations']
+    locations = ['classpath:/migrations']
     schemas = ['public']
     cleanDisabled = false
 }

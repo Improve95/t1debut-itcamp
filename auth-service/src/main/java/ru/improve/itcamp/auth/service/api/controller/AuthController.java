@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.improve.itcamp.auth.service.api.controller.spec.AuthControllerSpec;
 import ru.improve.itcamp.auth.service.api.dto.auth.login.LoginRequest;
 import ru.improve.itcamp.auth.service.api.dto.auth.login.LoginResponse;
 import ru.improve.itcamp.auth.service.api.dto.auth.signin.SignInRequest;
@@ -16,12 +17,13 @@ import ru.improve.itcamp.auth.service.core.security.service.AuthService;
 import static ru.improve.itcamp.auth.service.api.ApiPaths.AUTH;
 import static ru.improve.itcamp.auth.service.api.ApiPaths.LOGIN;
 import static ru.improve.itcamp.auth.service.api.ApiPaths.LOGOUT;
+import static ru.improve.itcamp.auth.service.api.ApiPaths.LOGOUT_ALL;
 import static ru.improve.itcamp.auth.service.api.ApiPaths.SIGN_IN;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(AUTH)
-public class AuthController {
+public class AuthController implements AuthControllerSpec {
 
     private final AuthService authService;
 
@@ -48,6 +50,12 @@ public class AuthController {
     @PostMapping(LOGOUT)
     public ResponseEntity<Void> logout() {
         authService.logout();
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(LOGOUT_ALL)
+    public ResponseEntity<Void> logoutAllTokens() {
+        authService.logoutAllToken();
         return ResponseEntity.ok().build();
     }
 

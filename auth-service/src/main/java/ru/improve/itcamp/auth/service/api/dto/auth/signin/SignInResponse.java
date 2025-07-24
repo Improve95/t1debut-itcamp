@@ -12,6 +12,4 @@ public class SignInResponse {
     private int id;
 
     private String accessToken;
-
-    private String refreshToken;
 }
