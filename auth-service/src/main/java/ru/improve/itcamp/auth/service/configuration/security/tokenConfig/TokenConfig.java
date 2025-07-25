@@ -13,7 +13,11 @@ public class TokenConfig {
 
     RefreshTokenConfig refresh;
 
+    JwsTokenConfig jws;
+
     public record AccessTokenConfig(String secret, Duration duration) {}
 
     public record RefreshTokenConfig(String secret, Duration duration) {}
+
+    public record JwsTokenConfig(String secret) {}
 }

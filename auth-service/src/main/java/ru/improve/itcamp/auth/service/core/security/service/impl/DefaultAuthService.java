@@ -2,6 +2,7 @@ package ru.improve.itcamp.auth.service.core.security.service.impl;
 
 import com.nimbusds.jose.crypto.RSADecrypter;
 import com.nimbusds.jose.crypto.RSAEncrypter;
+import com.nimbusds.jwt.JWTClaimsSet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -18,7 +19,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import ru.improve.itcamp.auth.service.api.dto.auth.login.LoginRequest;
@@ -29,7 +29,8 @@ import ru.improve.itcamp.auth.service.api.dto.auth.signin.SignInRequest;
 import ru.improve.itcamp.auth.service.api.dto.auth.signin.SignInResponse;
 import ru.improve.itcamp.auth.service.api.exception.ServiceException;
 import ru.improve.itcamp.auth.service.configuration.security.tokenConfig.TokenConfig;
-import ru.improve.itcamp.auth.service.core.security.JwtJweToken;
+import ru.improve.itcamp.auth.service.core.security.JweJwtToken;
+import ru.improve.itcamp.auth.service.core.security.object.UserSessionDetails;
 import ru.improve.itcamp.auth.service.core.security.service.AuthService;
 import ru.improve.itcamp.auth.service.core.security.service.TokenCryptoService;
 import ru.improve.itcamp.auth.service.core.service.RoleService;
@@ -88,29 +89,28 @@ public class DefaultAuthService implements AuthService {
         }
 
         try {
-            JwtJweToken token = (JwtJweToken) auth.getPrincipal();
+            JweJwtToken token = (JweJwtToken) auth.getPrincipal();
             int userId = Integer.parseInt(token.getSubject());
 
             if (tokenCryptoService.tokenIsExpired(token)) {
                 throw new ServiceException(EXPIRED);
             }
 
-            if (!accessTokenService.tokenIsPresent(token.getTokenValue(), userId)) {
+            if (!accessTokenService.tokenIsPresent(token.getJweToken(), userId)) {
                 throw new ServiceException(UNAUTHORIZED);
             }
 
             List<String> roles = token.getClaim(AUTHORITIES_CLAIM);
-            securityContext.setAuthentication(
+            UsernamePasswordAuthenticationToken userPasswordAuth =
                     new UsernamePasswordAuthenticationToken(
-                            // todo вынести данные о пользовательской сессии в UsernamePasswordAuthenticationToken.Details
                             userId,
-                            token.getJweToken(),
+                            null,
                             roles.stream()
                                     .map(SimpleGrantedAuthority::new)
                                     .toList()
-                    )
-            );
-
+                    );
+            userPasswordAuth.setDetails(new UserSessionDetails(token.getJweToken()));
+            securityContext.setAuthentication(userPasswordAuth);
 
             return true;
         } catch (Exception ex) {
@@ -159,7 +159,7 @@ public class DefaultAuthService implements AuthService {
             throw new ServiceException(UNAUTHORIZED);
         }
 
-        JwtClaimsSet claims = SecurityUtil.createClaims(user, tokenConfig.getAccess().duration());
+        JWTClaimsSet claims = SecurityUtil.createClaims(user, tokenConfig.getAccess().duration());
         String accessToken = tokenCryptoService.createToken(claims, rsaEncrypters.get(ACCESS_TOKEN + ENCODER));
 
         claims = SecurityUtil.createClaims(user, tokenConfig.getAccess().duration());
@@ -190,7 +190,7 @@ public class DefaultAuthService implements AuthService {
             }
 
             User user = userService.findUser(userId);
-            JwtClaimsSet claims = SecurityUtil.createClaims(user, tokenConfig.getAccess().duration());
+            JWTClaimsSet claims = SecurityUtil.createClaims(user, tokenConfig.getAccess().duration());
             String accessToken = tokenCryptoService.createToken(claims, rsaEncrypters.get(ACCESS_TOKEN + ENCODER));
             accessTokenService.saveToken(accessToken, user.getId());
 
@@ -204,13 +204,13 @@ public class DefaultAuthService implements AuthService {
 
     @Override
     public void logout() {
-        String jweToken = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
-        accessTokenService.deleteToken(jweToken);
+        UserSessionDetails details = SecurityUtil.getSessionDetailsByAuth();
+        accessTokenService.deleteToken(details.getToken());
     }
 
     @Override
     public void logoutAllToken() {
-        int userId = (int) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = SecurityUtil.getUserIdByAuth();
         accessTokenService.deleteAllPresentTokenByUserId(userId);
         refreshTokenService.deleteAllPresentTokenByUserId(userId);
     }

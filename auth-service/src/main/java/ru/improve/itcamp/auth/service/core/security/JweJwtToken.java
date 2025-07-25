@@ -1,24 +1,24 @@
 package ru.improve.itcamp.auth.service.core.security;
 
-import com.nimbusds.jose.JWEObject;
+import com.nimbusds.jwt.SignedJWT;
 import lombok.Getter;
 import org.springframework.security.oauth2.jwt.Jwt;
 
-public class JwtJweToken extends Jwt {
+public class JweJwtToken extends Jwt {
 
     @Getter
     private final String jweToken;
 
-    public JwtJweToken(
+    public JweJwtToken(
             String jweToken,
-            JWEObject jweObject
+            SignedJWT signedJWT
     ) {
         super(
-                jweObject.serialize(),
+                signedJWT.serialize(),
                 null,
                 null,
-                jweObject.getHeader().toJSONObject(),
-                jweObject.getPayload().toJSONObject()
+                signedJWT.getHeader().toJSONObject(),
+                signedJWT.getPayload().toJSONObject()
         );
         this.jweToken = jweToken;
     }

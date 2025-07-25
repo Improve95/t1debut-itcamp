@@ -26,6 +26,8 @@ app:
     refresh:
       secret: ${REFRESH_KEY_FILE_NAME}
       duration: 10D
+    jws:
+      secret: ${JWT_KEY_FILE_NAME}
 
 
 logging:

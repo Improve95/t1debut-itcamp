@@ -3,7 +3,6 @@ package ru.improve.itcamp.auth.service.core.service.impl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.improve.itcamp.auth.service.api.dto.user.UserResponse;
 import ru.improve.itcamp.auth.service.api.exception.ServiceException;
@@ -11,6 +10,7 @@ import ru.improve.itcamp.auth.service.core.repository.UserRepository;
 import ru.improve.itcamp.auth.service.core.service.UserService;
 import ru.improve.itcamp.auth.service.model.User;
 import ru.improve.itcamp.auth.service.util.DatabaseUtil;
+import ru.improve.itcamp.auth.service.util.SecurityUtil;
 import ru.improve.itcamp.auth.service.util.mapper.UserMapper;
 
 import static ru.improve.itcamp.auth.service.api.exception.ErrorCode.ALREADY_EXIST;
@@ -28,8 +28,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserResponse getUserByAuth() {
-        int userId = (int) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return getUser(userId);
+        return getUser(SecurityUtil.getUserIdByAuth());
     }
 
     @Transactional
