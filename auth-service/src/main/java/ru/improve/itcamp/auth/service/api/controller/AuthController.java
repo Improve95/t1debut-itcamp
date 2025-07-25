@@ -45,7 +45,7 @@ public class AuthController implements AuthControllerSpec {
 
     @PostMapping(ACCESS_TOKEN + REFRESH)
     public ResponseEntity<RefreshAccessTokenResponse> refreshAccessToken(
-            @RequestBody RefreshAccessTokenRequest refreshAccessTokenRequest
+            @RequestBody @Valid RefreshAccessTokenRequest refreshAccessTokenRequest
     ) {
         RefreshAccessTokenResponse refreshAccessTokenResponse = authService.refreshAccessToken(
                 refreshAccessTokenRequest

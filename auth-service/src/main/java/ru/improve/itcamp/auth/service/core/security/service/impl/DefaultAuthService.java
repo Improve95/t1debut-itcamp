@@ -4,6 +4,7 @@ import com.nimbusds.jose.crypto.RSADecrypter;
 import com.nimbusds.jose.crypto.RSAEncrypter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,6 +102,7 @@ public class DefaultAuthService implements AuthService {
             List<String> roles = token.getClaim(AUTHORITIES_CLAIM);
             securityContext.setAuthentication(
                     new UsernamePasswordAuthenticationToken(
+                            // todo вынести данные о пользовательской сессии в UsernamePasswordAuthenticationToken.Details
                             userId,
                             token.getJweToken(),
                             roles.stream()
@@ -108,6 +110,7 @@ public class DefaultAuthService implements AuthService {
                                     .toList()
                     )
             );
+
 
             return true;
         } catch (Exception ex) {
@@ -138,6 +141,7 @@ public class DefaultAuthService implements AuthService {
                 .build();
     }
 
+    @Transactional
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
@@ -186,10 +190,7 @@ public class DefaultAuthService implements AuthService {
             }
 
             User user = userService.findUser(userId);
-            JwtClaimsSet claims = SecurityUtil.createClaims(
-                    user,
-                    tokenConfig.getAccess().duration()
-            );
+            JwtClaimsSet claims = SecurityUtil.createClaims(user, tokenConfig.getAccess().duration());
             String accessToken = tokenCryptoService.createToken(claims, rsaEncrypters.get(ACCESS_TOKEN + ENCODER));
             accessTokenService.saveToken(accessToken, user.getId());
 

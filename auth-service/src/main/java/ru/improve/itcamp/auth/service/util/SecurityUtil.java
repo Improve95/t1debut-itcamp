@@ -18,6 +18,8 @@ import static ru.improve.itcamp.auth.service.api.exception.ErrorCode.INTERNAL_SE
 
 public final class SecurityUtil {
 
+    public static final String ISSUED_AT_CLAIM = "issuedAt";
+
     public static final String EXPIRES_AT_CLAIM = "expiresAt";
 
     public static final String AUTHORITIES_CLAIM = "userAuthorities";
@@ -42,9 +44,11 @@ public final class SecurityUtil {
             User user,
             Duration tokenDuration
     ) {
+        Instant issuedAt = Instant.now();
         return JwtClaimsSet.builder()
                 .subject(String.valueOf(user.getId()))
-                .claim(EXPIRES_AT_CLAIM, Instant.now().plus(tokenDuration).toEpochMilli())
+                .claim(ISSUED_AT_CLAIM, issuedAt.toEpochMilli())
+                .claim(EXPIRES_AT_CLAIM, issuedAt.plus(tokenDuration).toEpochMilli())
                 .claim(AUTHORITIES_CLAIM, user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
                 .build();
     }
