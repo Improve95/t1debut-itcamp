@@ -1,0 +1,61 @@
+services:
+  auth_db_postgres:
+    image: 'postgres:16.4'
+    container_name: "auth-postgres"
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${AUTH_PG_USER}
+      POSTGRES_PASSWORD: ${AUTH_PG_PASSWORD}
+      POSTGRES_DB: ${AUTH_PG_DATABASE}
+    ports:
+      - "${AUTH_PG_PORT}:5432"
+    networks:
+      - sopd_sign_network
+
+  auth_flyway:
+    image: 'flyway/flyway:11.4'
+    container_name: "auth-flyway"
+    env_file:
+      - .env
+    environment:
+      FLYWAY_URL: jdbc:postgresql://auth_db_postgres:5432/${AUTH_PG_DATABASE}
+      FLYWAY_USER: ${AUTH_PG_USER}
+      FLYWAY_PASSWORD: ${AUTH_PG_PASSWORD}
+    command:
+      - migrate
+    volumes:
+      - ./src/main/resources/migrations:/flyway/sql
+    depends_on:
+      auth_db_postgres:
+        condition: service_started
+        restart: true
+    networks:
+      - sopd_sign_network
+
+  auth_service:
+    build:
+      dockerfile: Dockerfile
+    container_name: "auth-service"
+    env_file:
+      - .env
+    environment:
+      AUTH_PG_HOST: auth_db_postgres
+      AUTH_PG_PORT: 5432
+      PUBLIC_KEY_FILE_PATH: keys/public/jws-public.pem
+      PRIVATE_KEY_FILE_PATH: keys/private/jws-private.pem
+    ports:
+      - "${AUTH_SERVICE_PORT}:8080"
+    volumes:
+      - ./src/main/resources/keys/public:/keys/public
+      - ./src/main/resources/keys/private:/keys/private
+    depends_on:
+      - auth_db_postgres
+    networks:
+      - sopd_sign_network
+
+networks:
+  sopd_sign_network:
+    name: "sopd-network"
+    driver: bridge
+    external: true

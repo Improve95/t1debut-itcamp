@@ -1,0 +1,1 @@
+alter table white_list_access_tokens alter token type varchar(2048);

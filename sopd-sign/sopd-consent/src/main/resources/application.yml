@@ -1,0 +1,59 @@
+server:
+  port: ${CONSENT_SERVICE_PORT}
+
+spring:
+  application:
+    name: consent-service
+  config:
+    import: optional:file:.env[.properties], optional:keys/private/minio.properties
+  datasource:
+    url: jdbc:postgresql://${CONSENT_PG_HOST}:${CONSENT_PG_PORT}/${CONSENT_PG_DATABASE}
+    username: ${CONSENT_PG_USER}
+    password: ${CONSENT_PG_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  kafka:
+    bootstrap-servers: ${KAFKA_OUTSIDE_HOST}:${KAFKA_OUTSIDE_PORT}
+    consent-request-email-message-topic: ${SOPD_EMAIL_REQUEST_MESSAGE_TOPIC}
+    consent-request-email-message-status-topic: ${SOPD_CONSENT_REQUEST_EMAIL_MESSAGE_STATUS_TOPIC}
+    consent-request-email-message-status-group-id: ${SOPD_CONSENT_REQUEST_EMAIL_MESSAGE_STATUS_GROUP_ID}
+    admin:
+      auto-create: false
+  cloud:
+    aws:
+      s3:
+        region: ${MINIO_REGION}
+        endpoint: ${MINIO_SERVICE_ENDPOINT}
+      credentials:
+        access-key: ${MINIO_ACCESS_KEY}
+        secret-key: ${MINIO_SECRET_KEY}
+
+app:
+  consent:
+    request-duration: ${SOPD_REQUEST_DURATION}
+    consent-duration: ${SOPD_CONSENT_DURATION}
+
+security:
+  token:
+    jws:
+      public-key-path: ${PUBLIC_KEY_FILE_PATH}
+
+external:
+  auth:
+    url: ${AUTH_CLIENT_URL}
+    connect-timeout: 10s
+    read-timeout: 10s
+  frontend:
+    url: ${FRONTEND_CLIENT_URL}
+
+s3-storage:
+  minio:
+    sopd-document-bucket-name: ${MINIO_SOPD_SOCUMENT_BUCKET_NAME}
+    email-form-bucket-name: ${MINIO_EMAIL_FORM_BUCKET_NAME}
+
+logging.level.org.springframework.security: ERROR
+logging.level.ru.t1debut.itcamp.consent.core.kafka.exception: INFO

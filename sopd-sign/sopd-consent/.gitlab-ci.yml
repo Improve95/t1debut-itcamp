@@ -1,0 +1,115 @@
+stages: [build, push, migrate, deploy]
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  IMAGE: $CI_REGISTRY_IMAGE
+
+.default-docker:
+  image: docker:20
+  services: [docker:20-dind]
+  before_script:
+    - docker info
+    - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token "$CI_REGISTRY" --password-stdin
+
+build:
+  stage: build
+  extends: .default-docker
+  script:
+    - docker build -t "$IMAGE:$CI_COMMIT_SHORT_SHA" .
+    - docker push "$IMAGE:$CI_COMMIT_SHORT_SHA"
+  rules:
+    - if: $CI_COMMIT_BRANCH
+
+push-dev:
+  stage: push
+  extends: .default-docker
+  needs: ["build"]
+  script:
+    - docker pull "$IMAGE:$CI_COMMIT_SHORT_SHA"
+    - docker tag "$IMAGE:$CI_COMMIT_SHORT_SHA" "$IMAGE:dev-$CI_COMMIT_SHORT_SHA"
+    - docker tag "$IMAGE:$CI_COMMIT_SHORT_SHA" "$IMAGE:dev-latest"
+    - docker push "$IMAGE:dev-$CI_COMMIT_SHORT_SHA"
+    - docker push "$IMAGE:dev-latest"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_BRANCH =~ /^feature\/SOPD-\d+$/'
+
+
+migrate_dev:
+  stage: migrate
+  image: alpine:3.20
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_BRANCH =~ /^feature\/SOPD-\d+$/'
+      changes:
+        - src/main/resources/migrations/**   
+  before_script:
+    - apk add --no-cache openssh-client rsync docker-cli
+    - eval "$(ssh-agent -s)"
+    - TMPKEY=$(mktemp) && install -m 600 "$SSH_PRIVATE_KEY" "$TMPKEY"
+    - mkdir -p ~/.ssh
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts && chmod 644 ~/.ssh/known_hosts
+    - ssh-add "$TMPKEY"
+  script: |
+    echo ">>> Синхронизируем миграции на сервер..."
+    rsync -avz --delete src/main/resources/migrations/ \
+      ${DEPLOY_USER}@${DEPLOY_HOST}:/opt/sopd/dev/migrations/consent/
+
+    echo ">>> Запускаем Flyway для consent-db..."
+    ssh -o StrictHostKeyChecking=yes $DEPLOY_USER@$DEPLOY_HOST \
+      CONSENT_PG_DATABASE="$CONSENT_PG_DATABASE" \
+      CONSENT_PG_USER="$CONSENT_PG_USER" \
+      CONSENT_PG_PASSWORD="$CONSENT_PG_PASSWORD" \
+      bash -s <<'EOF'
+        set -euo pipefail
+        docker run --rm \
+          --network=svc_net \
+          -v /opt/sopd/dev/migrations/consent:/flyway/sql \
+          flyway/flyway:9.22.3 \
+          -url=jdbc:postgresql://consent-db:5432/$CONSENT_PG_DATABASE \
+          -user=$CONSENT_PG_USER \
+          -password=$CONSENT_PG_PASSWORD \
+          -cleanDisabled=true \
+          -baselineOnMigrate=true \
+          -baselineVersion=1 \
+          migrate
+    EOF
+
+
+deploy_dev:
+  stage: deploy
+  image: docker:20
+  needs:
+  - job: push-dev
+  - job: migrate_dev
+    optional: true
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_BRANCH =~ /^feature\/SOPD-\d+$/'
+  before_script:
+    - eval "$(ssh-agent -s)"
+    - TMPKEY=$(mktemp) && install -m 600 "$SSH_PRIVATE_KEY" "$TMPKEY"
+    - mkdir -p ~/.ssh
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts && chmod 644 ~/.ssh/known_hosts
+    - ssh-add "$TMPKEY"
+    - '[ -n "$DEPLOY_HOST" ] || { echo "CI variable DEPLOY_HOST is empty" >&2; exit 1; }'
+    - '[ -n "$DEPLOY_USER" ] || { echo "CI variable DEPLOY_USER is empty" >&2; exit 1; }'
+    - '[ -n "$REGISTRY_URL" ] || { echo "CI variable REGISTRY_URL is empty" >&2; exit 1; }'
+    - '[ -n "$REGISTRY_USERNAME" ] || { echo "CI variable REGISTRY_USERNAME is empty" >&2; exit 1; }'
+    - '[ -n "$REGISTRY_PASSWORD" ] || { echo "CI variable REGISTRY_PASSWORD is empty" >&2; exit 1; }'
+  script: |
+    echo "SSH to: ${DEPLOY_USER}@${DEPLOY_HOST}"
+    ssh -o StrictHostKeyChecking=yes \
+      $DEPLOY_USER@$DEPLOY_HOST \
+      REGISTRY_URL="$REGISTRY_URL" \
+      REGISTRY_USERNAME="$REGISTRY_USERNAME" \
+      REGISTRY_PASSWORD="$REGISTRY_PASSWORD" \
+      bash -s <<'EOF'
+        set -euo pipefail
+        cd /opt/sopd/dev
+        echo "$REGISTRY_PASSWORD" | docker login "$REGISTRY_URL" -u "$REGISTRY_USERNAME" --password-stdin
+        docker compose pull consent
+        docker compose up -d consent    
+        echo "Consent deployed"
+    EOF
+  environment:
+    name: dev
+    url: http://$DEPLOY_HOST:8081/consent
