@@ -1,1 +1,1 @@
-![Архитектура](https://github.com/Improve95/t1debut-itcamp/raw/master/arc.png)
+![Архитектура](https://github.com/Improve95/raw/master/t1debut-itcamp/sopd-sign/arc.png)
