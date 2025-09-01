@@ -1,0 +1,1 @@
+![Архитектура](https://github.com/Improve95/t1debut-itcamp/raw/master/arc.png)
