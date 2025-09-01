@@ -1,0 +1,74 @@
+server:
+  port: ${NOTIFICATION_SERVICE_PORT}
+
+spring:
+  application:
+    name: notification-service
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+    url: jdbc:postgresql://${NOTIFICATION_PG_HOST}:${NOTIFICATION_PG_PORT}/${NOTIFICATION_PG_DATABASE}
+    username: ${NOTIFICATION_PG_USER}
+    password: ${NOTIFICATION_PG_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    enabled: true
+    change-log: db/changelog/db.changelog-master.xml
+
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9092}
+    consumer:
+      group-id: mail-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: ru.t1debut.itcamp.notification.service.domain
+        spring.json.value.default.type: ru.t1debut.itcamp.notification.service.domain.EmailMessageDto
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.trusted.packages: ru.t1debut.itcamp.notification.service.domain
+        spring.json.value.default.type: ru.t1debut.itcamp.notification.service.domain.EmailStatusEvent
+  mail:
+    host: ${MAIL_HOST:smtp.example.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USER:}
+    password: ${MAIL_PASS:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 10000
+          timeout: 10000
+          writetimeout: 10000
+    replace-alias-on-from: ${REPLACE_ALIAS_ON_FROM:false}
+
+app:
+  kafka:
+    email-topic: ${APP_MAIL_TOPIC:notification-email}
+    status-topic: ${APP_MAIL_STATUS_TOPIC:notification-email-status}
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,threaddump,env
+
+logging:
+  level:
+    org:
+      springframework:
+        security: ERROR
