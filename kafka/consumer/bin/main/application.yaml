@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: weather-statistics-service
+  config:
+    import: optional:file:.env[.properties]
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
+    weather-groupId: "weather-group"
+    weather-topic: "weather-event"
+
+KAFKA_HOST: ${KAFKA_OUTSIDE_HOST}
+KAFKA_PORT: ${KAFKA_OUTSIDE_PORT}

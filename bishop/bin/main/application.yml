@@ -1,0 +1,21 @@
+server:
+  port: ${BISHOP_PORT}
+
+spring:
+  application:
+    name: bishop
+  config:
+    import: optional:file:.env[.properties]
+
+synthetic-human:
+  executor:
+    thread-pool-size: 1
+    queue-size: 10
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
+    weyland-topic: "weyland-logging-topic"
+  logging:
+    publisher-type: ${PUBLISHER_TYPE}
+
+KAFKA_HOST: ${KAFKA_OUTSIDE_HOST}
+KAFKA_PORT: ${KAFKA_OUTSIDE_PORT}

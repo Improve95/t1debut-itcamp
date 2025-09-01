@@ -1,0 +1,16 @@
+ru.improve.itcamp.synthetic.human.core.starter.configuration.starter.SyntheticHumanConfig
+ru.improve.itcamp.synthetic.human.core.starter.api.controller.CommandController
+ru.improve.itcamp.synthetic.human.core.starter.core.command.impl.DefaultTaskSubmitter
+ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.TaskExecutorFactory
+ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.impl.DefaultImmediatelyTaskExecutor
+ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.impl.DefaultQueueTaskExecutor
+ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.threadPool.ImmediatelyThreadPool
+ru.improve.itcamp.synthetic.human.core.starter.core.command.executor.threadPool.QueueThreadPool
+ru.improve.itcamp.synthetic.human.core.starter.api.exception.ExceptionResolver
+ru.improve.itcamp.synthetic.human.core.starter.configuration.kafka.KafkaProducerConfiguration
+ru.improve.itcamp.synthetic.human.core.starter.core.logging.aspect.WeylandAspect
+ru.improve.itcamp.synthetic.human.core.starter.core.kafka.producer.WeylandProducer
+ru.improve.itcamp.synthetic.human.core.starter.configuration.logging.PublisherConfig
+ru.improve.itcamp.synthetic.human.core.starter.configuration.metrics.MetricsNameConfig
+ru.improve.itcamp.synthetic.human.core.starter.configuration.metrics.MetricsConfig
+ru.improve.itcamp.synthetic.human.core.starter.core.metrics.aspect.MetricsLoggingAspect

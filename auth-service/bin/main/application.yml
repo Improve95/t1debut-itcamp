@@ -1,0 +1,37 @@
+server:
+  port: ${AUTH_SERVICE_PORT}
+
+spring:
+  application:
+    name: auth-service
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+    url: jdbc:postgresql://${AUTH_PG_HOST}:${AUTH_PG_PORT}/${AUTH_PG_DATABASE}
+    username: ${AUTH_PG_USER}
+    password: ${AUTH_PG_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+app:
+  token:
+    access:
+      secret: ${ACCESS_KEY_FILE_NAME}
+      duration: 15m
+    refresh:
+      secret: ${REFRESH_KEY_FILE_NAME}
+      duration: 10D
+    jws:
+      secret: ${JWT_KEY_FILE_NAME}
+
+
+logging:
+  level:
+    org:
+      springframework:
+        security: ERROR
